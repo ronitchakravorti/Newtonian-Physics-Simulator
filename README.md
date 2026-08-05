@@ -30,4 +30,4 @@ Translating mathematical formulas into Python functions provided hands-on experi
 ## 🚀 How to Run Locally
 1. Clone this repository.
 2. Ensure Python 3.x is installed on your system.
-3. Run `python physics_simulator.py` in your terminal.
+3. Run 'newtonian_physics_simulator.py` in your terminal.
