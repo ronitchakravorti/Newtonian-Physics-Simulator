@@ -34,11 +34,13 @@ if st.button("Run Simulation", type="primary"):
     r1.metric("Time of Flight (T)", f"{t_flight:.2f} s")
     r2.metric("Maximum Height (H)", f"{max_h:.2f} m")
     r3.metric("Horizontal Range (R)", f"{h_range:.2f} m")
+        import pandas as pd
+        import numpy as np
+        t_vals = np.linspace(0, t_flight, 200)
+        x_vals = u * np.cos(theta_rad) * t_vals
+        y_vals = u * np.sin(theta_rad) * t_vals - 0.5 * G * t_vals ** 2
 
-    import numpy as np
-    t_vals = np.linspace(0, t_flight, 200)
-    x_vals = u * np.cos(theta_rad) * t_vals
-    y_vals = u * np.sin(theta_rad) * t_vals - 0.5 * G * t_vals ** 2
-
-    st.write("### 🚀 Trajectory")
-    st.line_chart({"Height (m)": y_vals}, x=x_vals)
+        st.write("### 🚀 Trajectory")
+        chart_data = pd.DataFrame({"Distance (m)": x_vals, "Height (m)": y_vals})
+        st.line_chart(chart_data, x="Distance (m)", y="Height (m)")
+  
