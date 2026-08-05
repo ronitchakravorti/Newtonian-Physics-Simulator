@@ -1,33 +1,67 @@
-# Newtonian-Physics-Simulator
-A Python-based Newtonian Physics Simulator that automates Class 12 projectile motion calculations. It takes initial velocity and angle as inputs to instantly compute Time of Flight, Maximum Height, and Range.
-# 🐍⚛️ Newtonian Physics Simulator: Projectile Motion
+import math
 
-## Overview
-This Python application automates standard Class 12 Physics calculations for two-dimensional projectile motion. By taking the Initial Velocity ($u$) and Angle of Projection ($\theta$) as user inputs, the simulator instantly computes key flight metrics. This project bridges the gap between theoretical kinematics and practical, modular programming logic.
+# Define Constants
+G = 9.81 # Acceleration due to gravity (m/s^2)
 
-## 🖥️ Application Preview
-![Console Output](image_7040c6.jpg)
 
-## 🔧 Features & Capabilities
-*   **Time of Flight:** Calculates the total time the projectile remains in the air.
-*   **Maximum Height:** Computes the peak vertical altitude reached during the trajectory.
-*   **Horizontal Range:** Determines the total horizontal distance traveled before impact.
-*   **Interactive Loop:** Allows the user to run continuous simulations without restarting the program.
+def calculate_time_of_flight(u, theta_rad):
+    """Calculates total time the projectile remains in the air."""
+    return (2 * u * math.sin(theta_rad)) / G
 
-## 🧮 The Physics Engine
-The simulator utilizes core kinematic equations and the Python `math` library, assuming standard gravity ($g = 9.81 \, \text{m/s}^2$):
 
-*   **Time of Flight ($T$):** $$T = \frac{2u \sin(\theta)}{g}$$
-*   **Maximum Height ($H$):** $$H = \frac{u^2 \sin^2(\theta)}{2g}$$
-*   **Horizontal Range ($R$):** $$R = \frac{u^2 \sin(2\theta)}{g}$$
+def calculate_max_height(u, theta_rad):
+    """Computes the peak vertical altitude reached."""
+    return ((u ** 2) * (math.sin(theta_rad) ** 2)) / (2 * G)
 
-## 💡 Project Learnings
-Translating mathematical formulas into Python functions provided hands-on experience with:
-*   Importing and utilizing the standard `math` library for trigonometric conversions (degrees to radians).
-*   Designing modular, reusable functions for individual calculations to keep code DRY (Don't Repeat Yourself).
-*   Formatting console outputs and utilizing `while` loops for a clean, interactive user experience.
 
-## 🚀 How to Run Locally
-1. Clone this repository.
-2. Ensure Python 3.x is installed on your system.
-3. Run 'newtonian_physics_simulator.py` in your terminal.
+def calculate_range(u, theta_rad):
+    """Determines total horizontal distance traveled."""
+    return ((u ** 2) * math.sin(2 * theta_rad)) / G
+
+
+def run_simulator():
+    print("Newtonian Physics Simulator: Projectile Motion")
+    while True:
+        try:
+            print("\n--- New Simulation ---")
+            u = float(input("Enter Initial Velocity (u) in m/s: "))
+            theta_deg = float(input("Enter Angle of Projection (θ) in degrees: "))
+
+            # Validate inputs
+            if u <= 0:
+                print("Velocity must be a positive number.")
+                continue
+            if not (0 <= theta_deg <= 90):
+                print("Angle must be between 0 and 90 degrees.")
+                continue
+
+            # Convert degrees to radians for Python math functions
+            theta_rad = math.radians(theta_deg)
+
+            # Perform calculations
+            t_flight = calculate_time_of_flight(u, theta_rad)
+            max_h = calculate_max_height(u, theta_rad)
+            h_range = calculate_range(u, theta_rad)
+
+            # Output Results
+            print("\nSimulation Results:")
+            print(f" • Time of Flight (T) : {t_flight:.2f} s")
+            print(f" • Maximum Height (H) : {max_h:.2f} m")
+            print(f" • Horizontal Range (R): {h_range:.2f} m")
+
+        except ValueError:
+            print("Invalid input. Please enter numerical values.")
+            continue
+
+        again = input("\nRun another simulation? (y/n): ").strip().lower()
+        if again != 'y':
+            print("Exiting Simulator. Goodbye!")
+            break
+
+
+if __name__ == "__main__":
+    try:
+        run_simulator()
+    except KeyboardInterrupt:
+        print("\nExiting Simulator. Goodbye!")
+
