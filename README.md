@@ -20,7 +20,7 @@ def calculate_range(u, theta_rad):
 
 
 def run_simulator():
-    print("Newtonian Physics Simulator: Projectile Motion")
+    print("🐍⚛️ Newtonian Physics Simulator: Projectile Motion 🐍⚛️")
     while True:
         try:
             print("\n--- New Simulation ---")
@@ -29,10 +29,10 @@ def run_simulator():
 
             # Validate inputs
             if u <= 0:
-                print("Velocity must be a positive number.")
+                print("⚠️ Velocity must be a positive number.")
                 continue
             if not (0 <= theta_deg <= 90):
-                print("Angle must be between 0 and 90 degrees.")
+                print("⚠️ Angle must be between 0 and 90 degrees.")
                 continue
 
             # Convert degrees to radians for Python math functions
@@ -44,18 +44,18 @@ def run_simulator():
             h_range = calculate_range(u, theta_rad)
 
             # Output Results
-            print("\nSimulation Results:")
+            print("\n📊 Simulation Results:")
             print(f" • Time of Flight (T) : {t_flight:.2f} s")
             print(f" • Maximum Height (H) : {max_h:.2f} m")
             print(f" • Horizontal Range (R): {h_range:.2f} m")
 
         except ValueError:
-            print("Invalid input. Please enter numerical values.")
+            print("⚠️ Invalid input. Please enter numerical values.")
             continue
 
         again = input("\nRun another simulation? (y/n): ").strip().lower()
         if again != 'y':
-            print("Exiting Simulator. Goodbye!")
+            print("Exiting Simulator. Goodbye! 🚀")
             break
 
 
@@ -63,5 +63,4 @@ if __name__ == "__main__":
     try:
         run_simulator()
     except KeyboardInterrupt:
-        print("\nExiting Simulator. Goodbye!")
-
+        print("\nExiting Simulator. Goodbye! 🚀")
