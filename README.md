@@ -1,4 +1,7 @@
+
+
 import math
+import streamlit as st
 
 # Define Constants
 G = 9.81 # Acceleration due to gravity (m/s^2)
@@ -19,48 +22,37 @@ def calculate_range(u, theta_rad):
     return ((u ** 2) * math.sin(2 * theta_rad)) / G
 
 
-def run_simulator():
-    print("🐍⚛️ Newtonian Physics Simulator: Projectile Motion 🐍⚛️")
-    while True:
-        try:
-            print("\n--- New Simulation ---")
-            u = float(input("Enter Initial Velocity (u) in m/s: "))
-            theta_deg = float(input("Enter Angle of Projection (θ) in degrees: "))
+st.set_page_config(page_title="Projectile Motion Simulator", page_icon="🚀")
 
-            # Validate inputs
-            if u <= 0:
-                print("⚠️ Velocity must be a positive number.")
-                continue
-            if not (0 <= theta_deg <= 90):
-                print("⚠️ Angle must be between 0 and 90 degrees.")
-                continue
+st.title("🐍⚛️ Newtonian Physics Simulator")
+st.subheader("Projectile Motion")
 
-            # Convert degrees to radians for Python math functions
-            theta_rad = math.radians(theta_deg)
+st.write("Enter the launch conditions below to calculate the projectile's flight characteristics.")
 
-            # Perform calculations
-            t_flight = calculate_time_of_flight(u, theta_rad)
-            max_h = calculate_max_height(u, theta_rad)
-            h_range = calculate_range(u, theta_rad)
+col1, col2 = st.columns(2)
+with col1:
+    u = st.number_input("Initial Velocity (u) in m/s", min_value=0.1, value=20.0, step=0.5)
+with col2:
+    theta_deg = st.slider("Angle of Projection (θ) in degrees", min_value=0, max_value=90, value=45)
 
-            # Output Results
-            print("\n📊 Simulation Results:")
-            print(f" • Time of Flight (T) : {t_flight:.2f} s")
-            print(f" • Maximum Height (H) : {max_h:.2f} m")
-            print(f" • Horizontal Range (R): {h_range:.2f} m")
+if st.button("Run Simulation", type="primary"):
+    theta_rad = math.radians(theta_deg)
 
-        except ValueError:
-            print("⚠️ Invalid input. Please enter numerical values.")
-            continue
+    t_flight = calculate_time_of_flight(u, theta_rad)
+    max_h = calculate_max_height(u, theta_rad)
+    h_range = calculate_range(u, theta_rad)
 
-        again = input("\nRun another simulation? (y/n): ").strip().lower()
-        if again != 'y':
-            print("Exiting Simulator. Goodbye! 🚀")
-            break
+    st.write("### 📊 Simulation Results")
+    r1, r2, r3 = st.columns(3)
+    r1.metric("Time of Flight (T)", f"{t_flight:.2f} s")
+    r2.metric("Maximum Height (H)", f"{max_h:.2f} m")
+    r3.metric("Horizontal Range (R)", f"{h_range:.2f} m")
 
+    # Simple trajectory plot
+    import numpy as np
+    t_vals = np.linspace(0, t_flight, 200)
+    x_vals = u * np.cos(theta_rad) * t_vals
+    y_vals = u * np.sin(theta_rad) * t_vals - 0.5 * G * t_vals ** 2
 
-if __name__ == "__main__":
-    try:
-        run_simulator()
-    except KeyboardInterrupt:
-        print("\nExiting Simulator. Goodbye! 🚀")
+    st.write("### 🚀 Trajectory")
+    st.line_chart({"Height (m)": y_vals}, x=x_vals)
